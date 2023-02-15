@@ -1,5 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
-import EtDesign from 'et-design'
+// import EtDesign from 'et-design'
 import 'et-design/dist/index.css'
 // 插件的组件，主要是demo组件
 import './styles/index.css'
@@ -10,8 +10,14 @@ import DemoBlock from 'vitepress-theme-demoblock/dist/client/components/DemoBloc
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    app.use(EtDesign)
-    app.component('Demo', Demo)
+    app.mixin({
+      mounted() {
+        import('et-design').then(function (m) {
+          app.use(m.default)
+        })
+      },
+    }),
+        app.component('Demo', Demo)
     app.component('DemoBlock', DemoBlock)
   }
 }
